@@ -51,21 +51,6 @@ python3 -m http.server 8000
 - **⌫** — remover formatação
 - **Abrir / Fontes / Código / Exportar .md** — ações globais à direita
 
-## Stack
-
-Três arquivos, sem build:
-
-- [`index.html`](index.html) — estrutura
-- [`styles.css`](styles.css) — tema claude.ai-ish (creme claro / dark quente)
-- [`script.js`](script.js) — lógica WYSIWYG + sincronização
-
-Dependências via CDN:
-
-- [`marked`](https://marked.js.org) — markdown → HTML
-- [`turndown`](https://github.com/mixmark-io/turndown) — HTML → markdown
-- [`turndown-plugin-gfm`](https://github.com/mixmark-io/turndown-plugin-gfm) — suporte a tabelas, strikethrough, task lists
-- [Google Fonts](https://fonts.google.com) — Source Serif 4, Inter, Lora, Merriweather, Playfair Display, EB Garamond, Space Grotesk, IBM Plex Sans, Roboto, Nunito, JetBrains Mono
-
 ## Licença
 
-MIT
+[PolyForm Noncommercial 1.0.0](LICENSE) — uso pessoal, educacional, pesquisa e projetos sem fins lucrativos são permitidos. Uso comercial ou incorporação em produtos é proibido.
