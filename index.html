@@ -3,193 +3,329 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MachDown</title>
+  <title>MachDown | Um editor markdown que some na sua frente</title>
+  <meta name="description" content="Editor markdown WYSIWYG leve, 100% local, sem servidor e sem tracking. Abra o arquivo, escreva." />
+  <meta name="theme-color" content="#f5f4ef" />
   <link rel="icon" type="image/png" href="img/md-logo.png" />
   <link rel="apple-touch-icon" href="img/md-app-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Lora:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Nunito:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <nav id="toolbar" class="toolbar" aria-label="Barra de ferramentas">
-      <div class="brand">
-        <img class="brand-logo" src="img/md-logo.png" alt="" />
-        <span class="brand-name">MachDown</span>
-      </div>
-      <span class="sep" aria-hidden="true"></span>
-      <button id="toggle-sidebar" type="button" class="ghost sidebar-toggle-btn" title="Mostrar/esconder arquivos" aria-pressed="false" aria-controls="sidebar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-        </svg>
-      </button>
-      <span class="sep" aria-hidden="true"></span>
-      <button data-action="h1" type="button" title="Título 1">H1</button>
-      <button data-action="h2" type="button" title="Título 2">H2</button>
-      <button data-action="h3" type="button" title="Título 3">H3</button>
-      <span class="sep" aria-hidden="true"></span>
-      <button data-action="bold" type="button" title="Negrito (Ctrl+B)"><strong>B</strong></button>
-      <button data-action="italic" type="button" title="Itálico (Ctrl+I)"><em>I</em></button>
-      <button data-action="strike" type="button" title="Tachado"><s>S</s></button>
-      <span class="sep" aria-hidden="true"></span>
-      <button data-action="quote" type="button" title="Citação">❝</button>
-      <button data-action="ul" type="button" title="Lista com marcadores">•</button>
-      <button data-action="ol" type="button" title="Lista numerada">1.</button>
-      <span class="sep" aria-hidden="true"></span>
-      <button data-action="code" type="button" title="Código inline">&lt;/&gt;</button>
-      <button data-action="codeblock" type="button" title="Bloco de código">{ }</button>
-      <button data-action="link" type="button" title="Link">↗</button>
-      <button data-action="image" type="button" title="Imagem" class="toolbar-icon-btn" aria-label="Inserir imagem">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <circle cx="8.5" cy="8.5" r="1.5"/>
-          <path d="M21 15l-5-5L5 21"/>
-        </svg>
-      </button>
-      <span class="sep" aria-hidden="true"></span>
-      <button data-action="clear" type="button" title="Remover formatação">⌫</button>
-      <span class="toolbar-spacer" aria-hidden="true"></span>
-      <button id="font-settings" type="button" class="ghost">Fontes</button>
-      <button id="toggle-mode" type="button" class="ghost toolbar-toggle" aria-pressed="false" title="Alternar entre visualização e código markdown">
-        <span class="toggle-icon" aria-hidden="true">&lt;/&gt;</span>
-        <span class="toggle-label">Código</span>
-      </button>
-      <button id="download-file" type="button" class="primary">Exportar .md</button>
+  <header class="nav">
+    <a class="nav-brand" href="#top">
+      <img src="img/md-logo.png" alt="" width="22" height="22" />
+      <span>MachDown</span>
+    </a>
+    <nav class="nav-links" aria-label="Seções">
+      <a href="#demo">Demo</a>
+      <a href="#features">Recursos</a>
+      <a href="#shortcuts">Atalhos</a>
+      <a href="#faq">FAQ</a>
     </nav>
-
-    <div class="workspace">
-      <aside class="sidebar" id="sidebar" aria-label="Gerenciador de arquivos">
-        <header class="sidebar-header">
-          <h2 class="sidebar-title">
-            <span id="sidebar-folder-name">Arquivos</span>
-          </h2>
-          <div class="sidebar-actions">
-            <button id="sidebar-new-file" type="button" title="Novo arquivo" class="icon-button" disabled>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="12" y1="13" x2="12" y2="17"/>
-                <line x1="10" y1="15" x2="14" y2="15"/>
-              </svg>
-            </button>
-            <button id="sidebar-new-folder" type="button" title="Nova pasta" class="icon-button" disabled>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-                <line x1="12" y1="11" x2="12" y2="17"/>
-                <line x1="9" y1="14" x2="15" y2="14"/>
-              </svg>
-            </button>
-            <span class="sidebar-actions-sep" aria-hidden="true"></span>
-            <button id="load-file" type="button" title="Abrir arquivo .md solto" class="icon-button">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-            </button>
-            <button id="sidebar-open-folder" type="button" title="Abrir pasta" class="icon-button">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-              </svg>
-            </button>
-            <button id="sidebar-close-folder" type="button" title="Fechar pasta" class="icon-button" hidden>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
-          </div>
-        </header>
-        <div class="sidebar-body" id="sidebar-body"></div>
-      </aside>
-
-      <main class="editor-shell">
-        <div
-          id="editor"
-          class="editor"
-          contenteditable="true"
-          spellcheck="true"
-          aria-label="Editor visual WYSIWYG"
-          data-placeholder="Comece a escrever…"
-        ></div>
-        <textarea
-          id="source-editor"
-          class="source-editor"
-          spellcheck="false"
-          aria-label="Editor de código markdown"
-          placeholder="# Comece a escrever em markdown…"
-        ></textarea>
-        <div id="source-highlight" class="source-highlight" aria-hidden="true"></div>
-      </main>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="https://github.com/willianmagna/MachDown" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn btn-primary" href="editor/index.html">Abrir editor</a>
     </div>
+  </header>
 
-    <footer class="footer-bar">
-      <span id="status">Editor pronto.</span>
-      <span class="hint"><kbd>Ctrl</kbd> + <kbd>S</kbd> exporta markdown</span>
-    </footer>
-  </div>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          100% local · zero tracking · zero setup
+        </span>
 
-  <input type="file" id="file-input" accept=".md,text/markdown" hidden />
+        <h1 class="hero-title">
+          Um editor markdown<br/>
+          que <em>some</em> na sua frente.
+        </h1>
 
-  <div class="tree-menu" id="tree-menu" role="menu" hidden>
-    <button type="button" data-menu-action="rename" role="menuitem">Renomear</button>
-    <button type="button" data-menu-action="delete" role="menuitem">Excluir</button>
-  </div>
+        <p class="hero-sub">
+          Editor markdown simples e visual. Abra em qualquer navegador, edite
+          com facilidade em WYSIWYG e código.
+        </p>
 
-  <div id="font-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-panel">
-      <div class="modal-header">
-        <h2>Configuração de fontes</h2>
-        <button id="close-font-modal" class="icon-button" aria-label="Fechar janela">×</button>
+        <ul class="hero-trust">
+          <li><span class="check">✓</span> Sem servidor</li>
+          <li><span class="check">✓</span> Roda offline</li>
+          <li><span class="check">✓</span> Sem cadastro</li>
+          <li><span class="check">✓</span> Autosave local</li>
+        </ul>
+
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="#demo">
+            Testar agora
+            <span aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn-ghost btn-lg" href="editor/index.html" target="_blank" rel="noopener">
+            Abrir Editor
+          </a>
+        </div>
       </div>
-      <div class="modal-body">
-        <section class="font-section">
-          <h3 class="font-section-title">Parágrafo</h3>
-          <div class="font-ribbon">
-            <div class="font-setting-row">
-              <label for="font-paragraph">Fonte</label>
-              <select id="font-paragraph" class="font-select"></select>
-            </div>
-            <div class="font-setting-row size">
-              <label for="font-size">Tamanho</label>
-              <select id="font-size" class="font-select"></select>
+
+      <div class="hero-glow" aria-hidden="true"></div>
+    </section>
+
+    <section id="demo" class="demo">
+      <div class="section-head">
+        <span class="section-label">Demo</span>
+        <h2>Mexa. De verdade.</h2>
+        <p>
+          Não é vídeo nem screenshot. É o editor completo, rodando aqui embaixo.
+          Clique dentro, escreva, alterne para código, aperte
+          <kbd>Ctrl</kbd>+<kbd>B</kbd>. Tudo que você fizer fica no seu navegador.
+        </p>
+      </div>
+
+      <div class="demo-frame">
+        <div class="demo-chrome">
+          <div class="chrome-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="chrome-address">
+            <span class="chrome-lock" aria-hidden="true">◈</span>
+            machdown.local
+          </div>
+          <div class="chrome-action">
+            <a href="editor/index.html" target="_blank" rel="noopener" title="Abrir em tela cheia">
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+        <div class="demo-body">
+          <iframe
+            id="demo-iframe"
+            src="editor/index.html?demo=1"
+            title="MachDown — editor markdown"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="demo-hint">
+        <span class="hint-pill">Dica</span>
+        Selecione qualquer texto e aperte <kbd>Ctrl</kbd>+<kbd>B</kbd>, ou clique em <b>Código</b>
+        na toolbar para ver o markdown por trás.
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="section-head">
+        <span class="section-label">Recursos</span>
+        <h2>Pequeno. Rápido. Seu.</h2>
+        <p>Os recursos que importam — e nada mais.</p>
+      </div>
+
+      <div class="features-grid">
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+          </div>
+          <h3>100% local</h3>
+          <p>Nada sai do seu navegador. Sem servidor, sem API, sem analytics.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l-5 8 5 8"/><path d="M16 4l5 8-5 8"/></svg>
+          </div>
+          <h3>WYSIWYG + código</h3>
+          <p>Alterne entre visualização rica e markdown puro sem perder o contexto.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 12h18"/></svg>
+          </div>
+          <h3>Zero setup</h3>
+          <p>Um <code>index.html</code>. Duplo-clique e está rodando.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12"/><path d="M12 4v16"/><path d="M9 20h6"/></svg>
+          </div>
+          <h3>Tipografia sob medida</h3>
+          <p>Fontes separadas para parágrafo e cada nível de título, com prévia.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M9 4v16"/></svg>
+          </div>
+          <h3>Suporte a GFM</h3>
+          <p>Tabelas, strikethrough e task lists preservados no round-trip.</p>
+        </article>
+
+        <article class="feature">
+          <div class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </div>
+          <h3>Dark mode</h3>
+          <p>Segue o <code>prefers-color-scheme</code> do sistema — sem botão nem config.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="split">
+      <div class="split-inner">
+        <div class="split-copy">
+          <span class="section-label">Dois lados, uma fonte</span>
+          <h2>Escreva como um humano. Edite como um dev.</h2>
+          <p>
+            O editor mantém o texto em markdown puro por baixo dos panos. Você
+            trabalha na visualização rica, e qualquer hora pode abrir o código
+            para um <code>rg</code>, um <code>git diff</code>, ou copiar para
+            outra ferramenta.
+          </p>
+          <ul class="split-points">
+            <li><span class="dot"></span> Round-trip visual ↔ markdown com âncora de scroll</li>
+            <li><span class="dot"></span> Atalhos nativos: <kbd>Ctrl</kbd>+<kbd>B</kbd>, <kbd>Ctrl</kbd>+<kbd>I</kbd>, <kbd>Ctrl</kbd>+<kbd>S</kbd></li>
+            <li><span class="dot"></span> Exporta <code>.md</code> limpo, pronto para commitar</li>
+          </ul>
+        </div>
+
+        <div class="split-visual" aria-hidden="true">
+          <div class="mini-window mini-visual">
+            <div class="mini-chrome"><span></span><span></span><span></span></div>
+            <div class="mini-body serif">
+              <h3 class="mini-h1">Notas de lançamento</h3>
+              <p>Hoje adicionamos <em>suporte a tabelas</em> e <b>task lists</b> no round-trip.</p>
+              <ul class="mini-tasks">
+                <li><span class="box checked">✓</span> Revisar PR #142</li>
+                <li><span class="box"></span> Escrever changelog</li>
+              </ul>
             </div>
           </div>
-        </section>
-
-        <section class="font-section">
-          <h3 class="font-section-title">Títulos</h3>
-          <div class="heading-grid">
-            <div class="font-setting-row">
-              <label for="font-h1">H1</label>
-              <select id="font-h1" class="font-select"></select>
-            </div>
-            <div class="font-setting-row">
-              <label for="font-h2">H2</label>
-              <select id="font-h2" class="font-select"></select>
-            </div>
-            <div class="font-setting-row">
-              <label for="font-h3">H3</label>
-              <select id="font-h3" class="font-select"></select>
-            </div>
-            <div class="font-setting-row">
-              <label for="font-h4">H4</label>
-              <select id="font-h4" class="font-select"></select>
+          <div class="mini-window mini-code">
+            <div class="mini-chrome"><span></span><span></span><span></span></div>
+            <div class="mini-body mono">
+              <div class="line"><span class="tk-h"># Notas de lançamento</span></div>
+              <div class="line">&nbsp;</div>
+              <div class="line">Hoje adicionamos <span class="tk-em">*suporte a tabelas*</span> e <span class="tk-b">**task lists**</span> no round-trip.</div>
+              <div class="line">&nbsp;</div>
+              <div class="line"><span class="tk-li">- [x]</span> Revisar PR #142</div>
+              <div class="line"><span class="tk-li">- [ ]</span> Escrever changelog</div>
             </div>
           </div>
-        </section>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button id="reset-font-settings" class="ghost" type="button">Redefinir</button>
-        <button id="save-font-settings" class="primary" type="button">Salvar</button>
+    </section>
+
+    <section id="shortcuts" class="shortcuts">
+      <div class="section-head">
+        <span class="section-label">Atalhos</span>
+        <h2>Na ponta dos dedos.</h2>
+        <p>Os comandos mais usados têm atalho. O resto está a um clique na toolbar.</p>
+      </div>
+
+      <div class="shortcuts-grid">
+        <div class="sc">
+          <div class="sc-keys"><kbd>Ctrl</kbd>+<kbd>S</kbd></div>
+          <div class="sc-desc">Exportar <code>.md</code></div>
+        </div>
+        <div class="sc">
+          <div class="sc-keys"><kbd>Ctrl</kbd>+<kbd>B</kbd></div>
+          <div class="sc-desc">Negrito</div>
+        </div>
+        <div class="sc">
+          <div class="sc-keys"><kbd>Ctrl</kbd>+<kbd>I</kbd></div>
+          <div class="sc-desc">Itálico</div>
+        </div>
+        <div class="sc">
+          <div class="sc-keys"><kbd>Tab</kbd></div>
+          <div class="sc-desc">Indentar 2 espaços</div>
+        </div>
+        <div class="sc">
+          <div class="sc-keys"><kbd>Código</kbd></div>
+          <div class="sc-desc">Alternar visualização ↔ markdown</div>
+        </div>
+        <div class="sc">
+          <div class="sc-keys"><kbd>Abrir</kbd></div>
+          <div class="sc-desc">Carregar <code>.md</code> local</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq">
+      <div class="section-head">
+        <span class="section-label">FAQ</span>
+        <h2>Perguntas honestas.</h2>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>Por que não tem conta nem servidor?</summary>
+          <p>
+            Porque não precisa. O editor roda inteiro no navegador. Autosave usa
+            <code>localStorage</code>. Quando você quer um arquivo, exporta. Simples,
+            e impossível de vazar pra um backend que não existe.
+          </p>
+        </details>
+        <details>
+          <summary>Onde os rascunhos ficam salvos?</summary>
+          <p>
+            No <code>localStorage</code> do seu navegador, vinculado à origem do
+            arquivo (<code>file://</code> ou o host onde você serviu). Limpar dados
+            do site apaga o rascunho — por isso a gente recomenda exportar o
+            <code>.md</code> quando terminar.
+          </p>
+        </details>
+        <details>
+          <summary>Dá para usar offline?</summary>
+          <p>
+            Depois do primeiro load, sim. Fontes e dependências vêm de CDN na
+            primeira vez, mas o editor em si funciona offline via cache do
+            navegador. Para offline garantido, sirva localmente.
+          </p>
+        </details>
+        <details>
+          <summary>É gratuito? Posso usar no trabalho?</summary>
+          <p>
+            Licença <b>PolyForm Noncommercial 1.0.0</b>: uso pessoal, educacional,
+            pesquisa e projetos sem fins lucrativos são permitidos. Uso comercial
+            ou incorporação em produto pago é proibido.
+          </p>
+        </details>
+        <details>
+          <summary>Como reportar bug ou contribuir?</summary>
+          <p>
+            Abra uma issue ou PR no repositório do GitHub. Código em HTML/CSS/JS
+            puro, sem build, então é fácil mexer.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="final-inner">
+        <h2>Abra e escreva.</h2>
+        <p>Um <code>index.html</code> está entre você e um editor inteiro.</p>
+        <a class="btn btn-primary btn-lg" href="editor/index.html">
+          Começar a escrever
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div class="site-footer-brand">
+        <img src="img/md-logo.png" alt="" width="20" height="20" />
+        <span>MachDown</span>
+      </div>
+      <div class="site-footer-meta">
+        <span>© <span id="year"></span> · PolyForm Noncommercial</span>
+        <a href="https://github.com/willianmagna/MachDown" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
-  </div>
+  </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

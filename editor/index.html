@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MachDown</title>
+  <link rel="icon" type="image/png" href="../img/md-logo.png" />
+  <link rel="apple-touch-icon" href="../img/md-app-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Lora:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600;700&family=EB+Garamond:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Nunito:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <nav id="toolbar" class="toolbar" aria-label="Barra de ferramentas">
+      <div class="brand">
+        <img class="brand-logo" src="../img/md-logo.png" alt="" />
+        <span class="brand-name">MachDown</span>
+      </div>
+      <span class="sep" aria-hidden="true"></span>
+      <button id="toggle-sidebar" type="button" class="ghost sidebar-toggle-btn" title="Mostrar/esconder arquivos" aria-pressed="false" aria-controls="sidebar">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <button data-action="h1" type="button" title="Título 1">H1</button>
+      <button data-action="h2" type="button" title="Título 2">H2</button>
+      <button data-action="h3" type="button" title="Título 3">H3</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button data-action="bold" type="button" title="Negrito (Ctrl+B)"><strong>B</strong></button>
+      <button data-action="italic" type="button" title="Itálico (Ctrl+I)"><em>I</em></button>
+      <button data-action="strike" type="button" title="Tachado"><s>S</s></button>
+      <span class="sep" aria-hidden="true"></span>
+      <button data-action="quote" type="button" title="Citação">❝</button>
+      <button data-action="ul" type="button" title="Lista com marcadores">•</button>
+      <button data-action="ol" type="button" title="Lista numerada">1.</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button data-action="code" type="button" title="Código inline">&lt;/&gt;</button>
+      <button data-action="codeblock" type="button" title="Bloco de código">{ }</button>
+      <button data-action="link" type="button" title="Link">↗</button>
+      <button data-action="image" type="button" title="Imagem" class="toolbar-icon-btn" aria-label="Inserir imagem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <button data-action="clear" type="button" title="Remover formatação">⌫</button>
+      <span class="toolbar-spacer" aria-hidden="true"></span>
+      <button id="font-settings" type="button" class="ghost">Fontes</button>
+      <button id="toggle-mode" type="button" class="ghost toolbar-toggle" aria-pressed="false" title="Alternar entre visualização e código markdown">
+        <span class="toggle-icon" aria-hidden="true">&lt;/&gt;</span>
+        <span class="toggle-label">Código</span>
+      </button>
+      <button id="download-file" type="button" class="primary">Exportar .md</button>
+    </nav>
+
+    <div class="workspace">
+      <aside class="sidebar" id="sidebar" aria-label="Gerenciador de arquivos">
+        <header class="sidebar-header">
+          <h2 class="sidebar-title">
+            <span id="sidebar-folder-name">Arquivos</span>
+          </h2>
+          <div class="sidebar-actions">
+            <button id="sidebar-new-file" type="button" title="Novo arquivo" class="icon-button" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="13" x2="12" y2="17"/>
+                <line x1="10" y1="15" x2="14" y2="15"/>
+              </svg>
+            </button>
+            <button id="sidebar-new-folder" type="button" title="Nova pasta" class="icon-button" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                <line x1="12" y1="11" x2="12" y2="17"/>
+                <line x1="9" y1="14" x2="15" y2="14"/>
+              </svg>
+            </button>
+            <span class="sidebar-actions-sep" aria-hidden="true"></span>
+            <button id="load-file" type="button" title="Abrir arquivo .md solto" class="icon-button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </button>
+            <button id="sidebar-open-folder" type="button" title="Abrir pasta" class="icon-button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+              </svg>
+            </button>
+            <button id="sidebar-close-folder" type="button" title="Fechar pasta" class="icon-button" hidden>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+        <div class="sidebar-body" id="sidebar-body"></div>
+      </aside>
+
+      <main class="editor-shell">
+        <div
+          id="editor"
+          class="editor"
+          contenteditable="true"
+          spellcheck="true"
+          aria-label="Editor visual WYSIWYG"
+          data-placeholder="Comece a escrever…"
+        ></div>
+        <textarea
+          id="source-editor"
+          class="source-editor"
+          spellcheck="false"
+          aria-label="Editor de código markdown"
+          placeholder="# Comece a escrever em markdown…"
+        ></textarea>
+        <div id="source-highlight" class="source-highlight" aria-hidden="true"></div>
+      </main>
+    </div>
+
+    <footer class="footer-bar">
+      <span id="status">Editor pronto.</span>
+      <span class="hint"><kbd>Ctrl</kbd> + <kbd>S</kbd> exporta markdown</span>
+    </footer>
+  </div>
+
+  <input type="file" id="file-input" accept=".md,text/markdown" hidden />
+
+  <div class="tree-menu" id="tree-menu" role="menu" hidden>
+    <button type="button" data-menu-action="rename" role="menuitem">Renomear</button>
+    <button type="button" data-menu-action="delete" role="menuitem">Excluir</button>
+  </div>
+
+  <div id="font-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2>Configuração de fontes</h2>
+        <button id="close-font-modal" class="icon-button" aria-label="Fechar janela">×</button>
+      </div>
+      <div class="modal-body">
+        <section class="font-section">
+          <h3 class="font-section-title">Parágrafo</h3>
+          <div class="font-ribbon">
+            <div class="font-setting-row">
+              <label for="font-paragraph">Fonte</label>
+              <select id="font-paragraph" class="font-select"></select>
+            </div>
+            <div class="font-setting-row size">
+              <label for="font-size">Tamanho</label>
+              <select id="font-size" class="font-select"></select>
+            </div>
+          </div>
+        </section>
+
+        <section class="font-section">
+          <h3 class="font-section-title">Títulos</h3>
+          <div class="heading-grid">
+            <div class="font-setting-row">
+              <label for="font-h1">H1</label>
+              <select id="font-h1" class="font-select"></select>
+            </div>
+            <div class="font-setting-row">
+              <label for="font-h2">H2</label>
+              <select id="font-h2" class="font-select"></select>
+            </div>
+            <div class="font-setting-row">
+              <label for="font-h3">H3</label>
+              <select id="font-h3" class="font-select"></select>
+            </div>
+            <div class="font-setting-row">
+              <label for="font-h4">H4</label>
+              <select id="font-h4" class="font-select"></select>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button id="reset-font-settings" class="ghost" type="button">Redefinir</button>
+        <button id="save-font-settings" class="primary" type="button">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
